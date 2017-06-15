@@ -7,7 +7,7 @@ var config = {
     entry: [
         'webpack-dev-server/client?http://127.0.0.1:8081',
         'webpack/hot/only-dev-server',
-        './src/js/App.js',
+        './src/js/index.js',
         './src/css/style.scss'
     ],
     output: {
