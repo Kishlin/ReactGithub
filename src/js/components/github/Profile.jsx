@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
+import RepoList from './RepoList.jsx';
+
 class Profile extends Component {
 	render() {
+		console.log('Repo List');
+		console.log(this.props.userRepos);
 		return (
 			<div className="panel panel-default">
 			  <div className="panel-heading">
@@ -38,6 +42,11 @@ class Profile extends Component {
 			      	</div>
 			      </div>
 			    </div>
+
+			    <hr />
+
+			    <h3>User Repositories</h3>
+			    <RepoList userRepos={this.props.userRepos} />
 			  </div>
 			</div>
 		);

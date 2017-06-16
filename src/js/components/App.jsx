@@ -10,11 +10,12 @@ class App extends Component {
 			username: 'kishlin',
 			userData: [],
 			userRepos: [],
-			perPage: 5,
+			perPage: 10,
 			company: 'yo'
 		}
 	}
 
+	// Get user details from Github api
 	getUserData() {
 		var request = new Request(
 			'https://api.github.com/users/' + this.state.username 
@@ -33,14 +34,36 @@ class App extends Component {
 		}.bind(this));
 	}
 
+	// Get user repos from Github api
+	getUserRepos() {
+		var request = new Request(
+			'https://api.github.com/users/' + this.state.username 
+			+ "/repos?per_page=" + this.state.perPage 
+			+ "&client_id=" + this.props.clientId
+			+ "&client_secret=" + this.props.clientSecret
+			+ "&sort=created"
+		);
+
+		fetch(request)
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(data) {
+			this.setState({
+				userRepos: data
+			});
+		}.bind(this));
+	}
+
 	componentDidMount() {
 		this.getUserData();
+		this.getUserRepos();
 	}
 
 	render() {
 		return (
 			<div>
-				<Profile userData={this.state.userData} />
+				<Profile {...this.state} />
 			</div>
 		);
 	}
