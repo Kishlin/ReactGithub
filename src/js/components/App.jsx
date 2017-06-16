@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
+import Profile from './github/Profile.jsx';
+
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -8,13 +10,38 @@ class App extends Component {
 			username: 'kishlin',
 			userData: [],
 			userRepos: [],
-			perPage: 5
+			perPage: 5,
+			company: 'yo'
 		}
+	}
+
+	getUserData() {
+		var request = new Request(
+			'https://api.github.com/users/' + this.state.username 
+			+ "?client_id=" + this.props.clientId
+			+ "&client_secret=" + this.props.clientSecret
+		);
+
+		fetch(request)
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(data) {
+			this.setState({
+				userData: data
+			});
+		}.bind(this));
+	}
+
+	componentDidMount() {
+		this.getUserData();
 	}
 
 	render() {
 		return (
-			<div>{this.state.username}</div>
+			<div>
+				<Profile userData={this.state.userData} />
+			</div>
 		);
 	}
 }
