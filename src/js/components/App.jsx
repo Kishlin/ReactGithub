@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import Profile from './github/Profile.jsx';
+import Search from './github/Search.jsx';
 
 class App extends Component {
 	constructor(props) {
@@ -25,12 +26,17 @@ class App extends Component {
 
 		fetch(request)
 		.then(function(response) {
-			return response.json();
-		})
-		.then(function(data) {
-			this.setState({
-				userData: data
-			});
+			if(response.ok) {
+				response
+				.json()
+				.then(function(data) {
+					this.setState({
+						userData: data
+					});
+				}.bind(this));
+			} else {
+				alert('User not found.');
+			}
 		}.bind(this));
 	}
 
@@ -46,13 +52,25 @@ class App extends Component {
 
 		fetch(request)
 		.then(function(response) {
-			return response.json();
-		})
-		.then(function(data) {
-			this.setState({
-				userRepos: data
-			});
+			if(response.ok) {
+				response
+				.json()
+				.then(function(data) {
+					this.setState({
+						userRepos: data
+					});
+				}.bind(this));
+			}
 		}.bind(this));
+	}
+
+	handleFormSubmit(username) {
+		this.setState({
+			username: username
+		}, function() {
+			this.getUserData();
+			this.getUserRepos();
+		});
 	}
 
 	componentDidMount() {
@@ -63,6 +81,8 @@ class App extends Component {
 	render() {
 		return (
 			<div>
+				<Search onFormSubmit={this.handleFormSubmit.bind(this)} />
+				<hr />
 				<Profile {...this.state} />
 			</div>
 		);
